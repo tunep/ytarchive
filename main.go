@@ -586,6 +586,7 @@ func init() {
 // ehh, bad way to do this probably but allows deferred functions to run
 // while also allowing early return with a non-0 exit code.
 func run() int {
+	LogWarn("Tunep's ytarchive fork")
 	info = NewDownloadInfo()
 	mergeOnCancel := ActionAsk
 	saveFilesOnCancel := ActionAsk
