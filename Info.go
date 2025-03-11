@@ -815,14 +815,30 @@ func (di *DownloadInfo) GetVideoInfo() bool {
 		return false
 	}
 
-	retrieved, pr, selQaulities := di.GetPlayablePlayerResponse()
-	di.LastUpdated = time.Now()
-	if retrieved == PlayerResponseNotFound {
-		di.Live = false
-		di.Unavailable = true
-		return false
-	} else if retrieved == PlayerResponseNotUsable {
-		return false
+	retrieved, pr, selQaulities
+	
+	maxRetries := 3
+	for i := 0; i < maxRetries; i++ {
+		retrieved, pr, selQualities := di.GetPlayablePlayerResponse()
+		di.LastUpdated = time.Now()
+
+		if retrieved == PlayerResponseNotFound {
+			LogWarn("Player Response Not Found, Retrying...")
+			di.Live = false
+			di.Unavailable = true
+			if i < maxRetries-1 {
+				time.Sleep(5 * time.Second) // Wait before retrying
+				continue
+			}
+			return false
+		} else if retrieved == PlayerResponseNotUsable {
+			LogWarn("Player Response Not Usable, Retrying...")
+			if i < maxRetries-1 {
+				time.Sleep(5 * time.Second)
+				continue
+			}
+			return false
+		}
 	}
 
 	streamData := pr.StreamingData
