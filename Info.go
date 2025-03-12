@@ -815,11 +815,11 @@ func (di *DownloadInfo) GetVideoInfo() bool {
 		return false
 	}
 
-	retrieved, pr, selQaulities
-	
+	_, pr, selQaulities := di.GetPlayablePlayerResponse()
+
 	maxRetries := 3
 	for i := 0; i < maxRetries; i++ {
-		retrieved, pr, selQualities := di.GetPlayablePlayerResponse()
+		retrieved, _, _ := di.GetPlayablePlayerResponse()
 		di.LastUpdated = time.Now()
 
 		if retrieved == PlayerResponseNotFound {
