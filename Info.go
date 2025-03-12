@@ -822,25 +822,28 @@ func (di *DownloadInfo) GetVideoInfo() bool {
 	)
 
 	maxRetries := 3
-	for i := 0; i < maxRetries; i++ {
+	retryDelayInSeconds := 3
+	for i := 0; i <= maxRetries; i++ {
 		di.LastUpdated = time.Now()
 		retrieved, pr, selQaulities = di.GetPlayablePlayerResponse()
 		if retrieved == PlayerResponseNotFound {
-			LogWarn("Player Response Not Found, Retrying...")
-			di.Live = false
-			di.Unavailable = true
-			if i < maxRetries-1 {
-				time.Sleep(5 * time.Second) // Wait before retrying
-				continue
+			if i == maxRetries {
+				LogWarn("Max Attempts Exceeded")
+				di.Live = false
+				di.Unavailable = true
+				return false
 			}
-			return false
+			LogWarn(fmt.Sprintf("Player Response Not Found, Retrying in %d seconds. [%d/%d]", retryDelayInSeconds, i+1, maxRetries))
+			time.Sleep(time.Duration(retryDelayInSeconds) * time.Second) // Wait before retrying
+			continue
 		} else if retrieved == PlayerResponseNotUsable {
-			LogWarn("Player Response Not Usable, Retrying...")
-			if i < maxRetries-1 {
-				time.Sleep(5 * time.Second)
-				continue
+			if i == maxRetries {
+				LogWarn("Max Attempts Exceeded")
+				return false
 			}
-			return false
+			LogWarn(fmt.Sprintf("Player Response Not Usable, Retrying in %d seconds. [%d/%d]", retryDelayInSeconds, i+1, maxRetries))
+			time.Sleep(time.Duration(retryDelayInSeconds) * time.Second) // Wait before retrying
+			continue
 		}
 	}
 
