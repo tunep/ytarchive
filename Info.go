@@ -844,6 +844,8 @@ func (di *DownloadInfo) GetVideoInfo() bool {
 			LogWarn(fmt.Sprintf("Player Response Not Usable, Retrying in %d seconds. [%d Attempts Left]", retryDelayInSeconds, maxRetries-i))
 			time.Sleep(time.Duration(retryDelayInSeconds) * time.Second) // Wait before retrying
 			continue
+		} else {
+			break
 		}
 	}
 
