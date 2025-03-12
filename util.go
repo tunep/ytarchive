@@ -79,9 +79,9 @@ const (
 	NetworkBoth         = "tcp"
 	NetworkIPv4         = "tcp4"
 	NetworkIPv6         = "tcp6"
-	DefaultPollTime     = 60
-	MinimumMonitorTime  = 30
-	DefaultMonitorTime  = 60
+	DefaultPollTime     = 60 //default 15
+	MinimumMonitorTime  = 60 //default 30
+	DefaultMonitorTime  = 60 //default 60
 	DefaultVideoQuality = "best"
 )
 
@@ -676,8 +676,10 @@ func ContinueFragmentDownload(di *DownloadInfo, state *fragThreadState) bool {
 					LogWarn("%s: You might want to use youtube-dl to download instead.", state.Name)
 				}
 				di.PrintStatus()
-				di.SetFinished(state.DataType)
-				return false
+				LogWarn("fuck that noise, we still ballin")
+				//di.SetFinished(state.DataType)
+				//return false
+				state.Tries = 0 //debug, tryna get this shit to not stop
 			} else if state.MaxSeq > -1 && state.SeqNum < (state.MaxSeq-2) && state.FullRetries > 0 {
 				LogDebug("%s: More than two fragments away from the highest known fragment", state.Name)
 				LogDebug("%s: Will try grabbing the fragment %d more times", state.Name, state.FullRetries)
