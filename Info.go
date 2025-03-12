@@ -815,13 +815,16 @@ func (di *DownloadInfo) GetVideoInfo() bool {
 		return false
 	}
 
-	_, pr, selQaulities := di.GetPlayablePlayerResponse()
+	var (
+		retrieved    int
+		pr           *PlayerResponse
+		selQaulities []string
+	)
 
 	maxRetries := 3
 	for i := 0; i < maxRetries; i++ {
-		retrieved, _, _ := di.GetPlayablePlayerResponse()
 		di.LastUpdated = time.Now()
-
+		retrieved, pr, selQaulities = di.GetPlayablePlayerResponse()
 		if retrieved == PlayerResponseNotFound {
 			LogWarn("Player Response Not Found, Retrying...")
 			di.Live = false
