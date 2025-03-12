@@ -821,7 +821,7 @@ func (di *DownloadInfo) GetVideoInfo() bool {
 		selQaulities []string
 	)
 
-	maxRetries := 100
+	maxRetries := 60
 	retryDelayInSeconds := 60
 	for i := 0; i <= maxRetries; i++ {
 		di.LastUpdated = time.Now()
