@@ -79,7 +79,7 @@ const (
 	NetworkBoth         = "tcp"
 	NetworkIPv4         = "tcp4"
 	NetworkIPv6         = "tcp6"
-	DefaultPollTime     = 15
+	DefaultPollTime     = 60
 	MinimumMonitorTime  = 30
 	DefaultMonitorTime  = 60
 	DefaultVideoQuality = "best"
